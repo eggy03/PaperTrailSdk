@@ -3,16 +3,16 @@ package io.github.eggy03.papertrail.sdk.entity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 @RequiredArgsConstructor
 @Getter
 @Builder(toBuilder = true)
 public class AuditLogRegistrationEntity {
 
-    @Nullable
+    @NotNull
     final String guildId;
 
-    @Nullable
+    @NotNull
     final String channelId;
 }
