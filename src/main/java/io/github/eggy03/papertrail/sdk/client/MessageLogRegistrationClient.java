@@ -14,12 +14,22 @@ import org.springframework.http.MediaType;
 
 import java.util.Optional;
 
+/**
+ * Client for managing message log registrations via the PaperTrail API.
+ */
 @RequiredArgsConstructor
 @Slf4j
 public class MessageLogRegistrationClient {
 
     private final String baseUrl;
 
+    /**
+     * Registers a guild for message logging.
+     *
+     * @param guildId   the Discord guild ID (must not be {@code null})
+     * @param channelId the Discord channel ID where message logs should be sent (must not be {@code null})
+     * @return {@code true} if the registration succeeded, {@code false} otherwise
+     */
     public boolean registerGuild(@NonNull String guildId, @NonNull String channelId) {
 
         HttpHeaders headers = new HttpHeaders();
@@ -39,6 +49,13 @@ public class MessageLogRegistrationClient {
         return responseBody.isRight();
     }
 
+
+    /**
+     * Retrieves the message log registration for a guild, if one exists.
+     *
+     * @param guildId the Discord guild ID (must not be {@code null})
+     * @return an {@link Optional} containing the registration if found, or empty if not registered
+     */
     @NotNull
     public Optional<MessageLogRegistrationEntity> getRegisteredGuild (@NonNull String guildId) {
 
@@ -59,6 +76,12 @@ public class MessageLogRegistrationClient {
         return response.map(Optional::of).getOrElse(Optional.empty());
     }
 
+    /**
+     * Deletes the message log registration for a guild.
+     *
+     * @param guildId the Discord guild ID (must not be {@code null})
+     * @return {@code true} if the deletion succeeded, {@code false} otherwise
+     */
     public boolean deleteRegisteredGuild (@NonNull String guildId) {
 
         HttpHeaders headers = new HttpHeaders();

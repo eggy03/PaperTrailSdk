@@ -14,12 +14,23 @@ import org.springframework.http.MediaType;
 
 import java.util.Optional;
 
+/**
+ * Client for managing stored message content via the PaperTrail API.
+ */
 @RequiredArgsConstructor
 @Slf4j
 public class MessageLogContentClient {
 
     private final String baseUrl;
 
+    /**
+     * Logs a new message's content.
+     *
+     * @param messageId      the Discord message ID (must not be {@code null})
+     * @param messageContent the content of the message (may be {@code null} or empty if redacted)
+     * @param authorId       the Discord user ID of the message author (must not be {@code null})
+     * @return {@code true} if the message was logged successfully, {@code false} otherwise
+     */
     public boolean logMessage(@NonNull String messageId, String messageContent, @NonNull String authorId) {
 
         HttpHeaders headers = new HttpHeaders();
@@ -39,6 +50,12 @@ public class MessageLogContentClient {
         return responseBody.isRight();
     }
 
+    /**
+     * Retrieves a logged message by its ID.
+     *
+     * @param messageId the Discord message ID (must not be {@code null})
+     * @return an {@link Optional} containing the message content if found, or empty if not present
+     */
     @NotNull
     public Optional<MessageLogContentEntity> retrieveMessage (@NonNull String messageId) {
 
@@ -59,7 +76,15 @@ public class MessageLogContentClient {
         return response.map(Optional::of).getOrElse(Optional.empty());
     }
 
-    public boolean updateMessage (@NonNull String messageId, String messageContent, @NonNull String authorId) {
+    /**
+     * Updates the content of an already logged message.
+     *
+     * @param messageId      the Discord message ID (must not be {@code null})
+     * @param messageContent the updated message content (must not be {@code null})
+     * @param authorId       the Discord user ID of the message author (must not be {@code null})
+     * @return {@code true} if the update succeeded, {@code false} otherwise
+     */
+    public boolean updateMessage (@NonNull String messageId, @NonNull String messageContent, @NonNull String authorId) {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -77,6 +102,12 @@ public class MessageLogContentClient {
         return responseBody.isRight();
     }
 
+    /**
+     * Deletes a logged message by its ID.
+     *
+     * @param messageId the Discord message ID (must not be {@code null})
+     * @return {@code true} if the deletion succeeded, {@code false} otherwise
+     */
     public boolean deleteMessage (@NonNull String messageId) {
 
         HttpHeaders headers = new HttpHeaders();

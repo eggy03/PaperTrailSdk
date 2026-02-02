@@ -14,11 +14,20 @@ import org.springframework.http.MediaType;
 
 import java.util.Optional;
 
+/**
+ * Client for managing audit log registrations via the PaperTrail API.
+ */
 @Slf4j
 public class AuditLogRegistrationClient {
 
     private final String baseUrl;
 
+    /**
+     * Creates a new {@code AuditLogRegistrationClient}.
+     *
+     * @param baseUrl the base URL of the PaperTrail API (must not be {@code null} or blank)
+     * @throws ApiBaseUrlException if the base URL is {@code null} or empty
+     */
     public AuditLogRegistrationClient(String baseUrl){
         if(baseUrl==null || baseUrl.trim().isEmpty())
             throw new ApiBaseUrlException("Base URL is null or empty");
@@ -26,6 +35,13 @@ public class AuditLogRegistrationClient {
         this.baseUrl = baseUrl;
     }
 
+    /**
+     * Registers a guild for audit logging.
+     *
+     * @param guildId   the Discord guild ID (must not be {@code null})
+     * @param channelId the Discord channel ID where audit logs should be sent (must not be {@code null})
+     * @return {@code true} if the registration succeeded, {@code false} otherwise
+     */
     public boolean registerGuild(@NonNull String guildId, @NonNull String channelId) {
 
         HttpHeaders headers = new HttpHeaders();
@@ -45,6 +61,12 @@ public class AuditLogRegistrationClient {
         return responseBody.isRight();
     }
 
+    /**
+     * Retrieves the audit log registration for a guild, if one exists.
+     *
+     * @param guildId the Discord guild ID (must not be {@code null})
+     * @return an {@link Optional} containing the registration if found, or empty if not registered
+     */
     @NotNull
     public Optional<AuditLogRegistrationEntity> getRegisteredGuild (@NonNull String guildId) {
 
@@ -65,6 +87,12 @@ public class AuditLogRegistrationClient {
         return response.map(Optional::of).getOrElse(Optional.empty());
     }
 
+    /**
+     * Deletes the audit log registration for a guild.
+     *
+     * @param guildId the Discord guild ID (must not be {@code null})
+     * @return {@code true} if the deletion succeeded, {@code false} otherwise
+     */
     public boolean deleteRegisteredGuild (@NonNull String guildId) {
 
         HttpHeaders headers = new HttpHeaders();

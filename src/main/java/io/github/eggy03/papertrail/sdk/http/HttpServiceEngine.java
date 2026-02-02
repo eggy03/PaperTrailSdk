@@ -15,12 +15,30 @@ import org.springframework.web.client.RestClient;
 import java.net.URI;
 import java.time.Instant;
 
+/**
+ * Utility class responsible for executing HTTP requests to the PaperTrail API.
+ * <p>
+ * This class provides static helper methods for making REST calls using
+ * Spring's {@link RestClient} and returns responses wrapped in Vavr's {@link Either}
+ * </p>
+ */
 @Slf4j
 @UtilityClass
 public class HttpServiceEngine {
 
     private static final RestClient client = RestClient.builder().build();
 
+    /**
+     * Executes an HTTP request without a request body.
+     *
+     * @param httpMethod            the HTTP method to use (e.g., GET, DELETE)
+     * @param url                   the target URL
+     * @param headers               the HTTP headers to include in the request
+     * @param successResponseClass  the expected response type on success
+     * @param <S>                   the success response type
+     * @return an {@link Either} containing either an {@link ErrorEntity} on failure
+     *         or a deserialized success response on success
+     */
     public static <S> Either<ErrorEntity, S> makeRequest (
             @NotNull HttpMethod httpMethod,
             @NotNull String url,
@@ -51,6 +69,18 @@ public class HttpServiceEngine {
         }
     }
 
+    /**
+     * Executes an HTTP request with a request body.
+     *
+     * @param httpMethod            the HTTP method to use (e.g., POST, PUT)
+     * @param url                   the target URL
+     * @param headers               the HTTP headers to include in the request
+     * @param requestBody           the request body to send
+     * @param successResponseClass  the expected response type on success
+     * @param <S>                   the success response type
+     * @return an {@link Either} containing either an {@link ErrorEntity} on failure
+     *         or a deserialized success response on success
+     */
     public static <S> Either<ErrorEntity, S> makeRequestWithBody (
             @NotNull HttpMethod httpMethod,
             @NotNull String url,
