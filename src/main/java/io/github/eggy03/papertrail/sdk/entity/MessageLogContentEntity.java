@@ -1,21 +1,21 @@
 package io.github.eggy03.papertrail.sdk.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
-@RequiredArgsConstructor
-@Getter
-@Builder(toBuilder = true)
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class MessageLogContentEntity {
 
     @NotNull
-    final String messageId;
+    private String messageId;
 
     @NotNull
-    final String messageContent;
+    private String messageContent;
 
     @NotNull
-    final String authorId;
+    private String authorId;
 }

@@ -1,18 +1,18 @@
 package io.github.eggy03.papertrail.sdk.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
-@RequiredArgsConstructor
-@Getter
-@Builder(toBuilder = true)
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class MessageLogRegistrationEntity {
 
     @NotNull
-    final String guildId;
+    private String guildId;
 
     @NotNull
-    final String channelId;
+    private String channelId;
 }

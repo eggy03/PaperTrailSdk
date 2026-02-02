@@ -1,19 +1,19 @@
 package io.github.eggy03.papertrail.sdk.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
-@RequiredArgsConstructor
-@Getter
-@Builder(toBuilder = true)
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ErrorEntity {
 
-    final int status;
-    @NotNull final String error;
-    @NotNull final String message;
-    @NotNull final String timeStamp;
-    @NotNull final String path;
+    private int status;
+    @NotNull private String error;
+    @NotNull private String message;
+    @NotNull private String timeStamp;
+    @NotNull private String path;
 
 }
