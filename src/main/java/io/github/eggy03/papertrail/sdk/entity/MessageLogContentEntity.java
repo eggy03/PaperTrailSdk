@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 @RequiredArgsConstructor
 @Getter
 @Builder(toBuilder = true)
-public class MessageContentEntity {
+public class MessageLogContentEntity {
 
     @Nullable
     final String messageId;
