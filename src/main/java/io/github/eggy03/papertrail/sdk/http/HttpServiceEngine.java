@@ -26,7 +26,7 @@ import java.time.Instant;
 @UtilityClass
 public class HttpServiceEngine {
 
-    private static final RestClient client = RestClient.builder().build();
+    private static final RestClient client = RestClient.create();
 
     /**
      * Executes an HTTP request without a request body.

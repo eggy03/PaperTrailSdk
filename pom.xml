@@ -6,7 +6,7 @@
 
     <groupId>io.github.eggy03</groupId>
     <artifactId>papertrail-sdk</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 
     <properties>
         <maven.compiler.release>8</maven.compiler.release>
@@ -30,6 +30,7 @@
 
         <!-- dependencies version -->
         <spring.web.version>7.0.3</spring.web.version>
+        <jackson.databind.version>3.0.4</jackson.databind.version>
         <jackson.annotations.version>2.21</jackson.annotations.version>
         <vavr.version>0.11.0</vavr.version>
         <lombok.version>1.18.42</lombok.version>
@@ -55,6 +56,11 @@
             <groupId>io.vavr</groupId>
             <artifactId>vavr</artifactId>
             <version>${vavr.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>tools.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.databind.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
