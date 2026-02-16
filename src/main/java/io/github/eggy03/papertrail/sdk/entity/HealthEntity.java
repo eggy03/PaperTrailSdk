@@ -2,7 +2,6 @@ package io.github.eggy03.papertrail.sdk.entity;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
 import lombok.Getter;
 import org.jspecify.annotations.Nullable;
 
@@ -38,7 +37,7 @@ public class HealthEntity {
             this.ssl = ssl;
         }
 
-        @Data
+        @Getter
         public static class Database {
             @Nullable String status;
 
@@ -48,7 +47,7 @@ public class HealthEntity {
             }
         }
 
-        @Data
+        @Getter
         public static class Ping {
             @Nullable String status;
 
@@ -58,7 +57,7 @@ public class HealthEntity {
             }
         }
 
-        @Data
+        @Getter
         public static class Redis {
             @Nullable String status;
 
@@ -68,7 +67,7 @@ public class HealthEntity {
             }
         }
 
-        @Data
+        @Getter
         public static class Ssl {
             String status;
 
