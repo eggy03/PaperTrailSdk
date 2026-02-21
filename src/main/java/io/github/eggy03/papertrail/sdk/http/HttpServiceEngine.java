@@ -59,7 +59,7 @@ public class HttpServiceEngine {
             ErrorEntity error = e.getResponseBodyAs(ErrorEntity.class);
             return Either.left(error);
         } catch (HttpServerErrorException e) {
-            log.error("Server error when calling {} {}: {}", httpMethod, url, e.getMessage(), e);
+            log.warn("Server error when calling {} {}: {}", httpMethod, url, e.getMessage(), e);
             ErrorEntity error = e.getResponseBodyAs(ErrorEntity.class);
             return Either.left(error);
         } catch (ResourceAccessException e) {
