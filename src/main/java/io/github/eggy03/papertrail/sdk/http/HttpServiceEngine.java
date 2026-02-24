@@ -1,8 +1,9 @@
 package io.github.eggy03.papertrail.sdk.http;
 
 import io.github.eggy03.papertrail.sdk.entity.ErrorEntity;
+import io.github.eggy03.papertrail.sdk.exception.ApiBaseUrlException;
 import io.vavr.control.Either;
-import lombok.experimental.UtilityClass;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpHeaders;
@@ -22,31 +23,38 @@ import java.time.Instant;
  * </p>
  */
 @Slf4j
-@UtilityClass
 public class HttpServiceEngine {
 
-    private static final RestClient client = RestClient.create();
+    private final RestClient client;
+
+    public HttpServiceEngine(@NonNull String baseUrl) {
+
+        if(baseUrl.trim().isEmpty())
+            throw new ApiBaseUrlException("Base URL is null or empty");
+
+        this.client = RestClient.builder().baseUrl(baseUrl.replaceAll("/+$", "")).build();
+    }
 
     /**
      * Executes an HTTP request without a request body.
      *
      * @param httpMethod            the HTTP method to use (e.g., GET, DELETE)
-     * @param url                   the target URL
+     * @param path                  the target API path
      * @param headers               the HTTP headers to include in the request
      * @param successResponseClass  the expected response type on success
      * @param <S>                   the success response type
      * @return an {@link Either} containing either an {@link ErrorEntity} on failure
      *         or a deserialized success response on success
      */
-    public static <S> Either<ErrorEntity, S> makeRequest (
+    public <S> Either<ErrorEntity, S> makeRequest (
             @NotNull HttpMethod httpMethod,
-            @NotNull String url,
+            @NotNull String path,
             @NotNull HttpHeaders headers,
             @NotNull Class<S> successResponseClass) {
 
         try {
             S body = client.method(httpMethod)
-                    .uri(builder -> builder.path(url).build())
+                    .uri(builder -> builder.path(path).build())
                     .headers(h-> h.addAll(headers))
                     .retrieve()
                     .toEntity(successResponseClass)
@@ -54,16 +62,16 @@ public class HttpServiceEngine {
 
             return Either.right(body);
         } catch (HttpClientErrorException e) {
-            log.debug("Client error when calling {} {}: {}", httpMethod, url, e.getMessage(), e);
+            log.debug("Client error when calling {} {}: {}", httpMethod, path, e.getMessage(), e);
             ErrorEntity error = e.getResponseBodyAs(ErrorEntity.class);
             return Either.left(error);
         } catch (HttpServerErrorException e) {
-            log.warn("Server error when calling {} {}: {}", httpMethod, url, e.getMessage(), e);
+            log.warn("Server error when calling {} {}: {}", httpMethod, path, e.getMessage(), e);
             ErrorEntity error = e.getResponseBodyAs(ErrorEntity.class);
             return Either.left(error);
         } catch (ResourceAccessException e) {
-            log.error("Resource access error when calling {} {}: {}", httpMethod, url, e.getMessage(), e);
-            ErrorEntity error =  new ErrorEntity(503, "API Unreachable", e.getMessage(), Instant.now().toString(), url);
+            log.error("Resource access error when calling {} {}: {}", httpMethod, path, e.getMessage(), e);
+            ErrorEntity error =  new ErrorEntity(503, "API Unreachable", e.getMessage(), Instant.now().toString(), path);
             return Either.left(error);
         }
     }
@@ -72,7 +80,7 @@ public class HttpServiceEngine {
      * Executes an HTTP request with a request body.
      *
      * @param httpMethod            the HTTP method to use (e.g., POST, PUT)
-     * @param url                   the target URL
+     * @param path                  the target API path
      * @param headers               the HTTP headers to include in the request
      * @param requestBody           the request body to send
      * @param successResponseClass  the expected response type on success
@@ -80,16 +88,16 @@ public class HttpServiceEngine {
      * @return an {@link Either} containing either an {@link ErrorEntity} on failure
      *         or a deserialized success response on success
      */
-    public static <S> Either<ErrorEntity, S> makeRequestWithBody (
+    public <S> Either<ErrorEntity, S> makeRequestWithBody (
             @NotNull HttpMethod httpMethod,
-            @NotNull String url,
+            @NotNull String path,
             @NotNull HttpHeaders headers,
             @NotNull Object requestBody,
             @NotNull Class<S> successResponseClass) {
 
         try {
             S body = client.method(httpMethod)
-                    .uri(builder -> builder.path(url).build())
+                    .uri(builder -> builder.path(path).build())
                     .headers(h-> h.addAll(headers))
                     .body(requestBody)
                     .retrieve()
@@ -99,16 +107,16 @@ public class HttpServiceEngine {
             return Either.right(body);
 
         } catch (HttpClientErrorException e) {
-            log.debug("Client error when calling {} {}: {}", httpMethod, url, e.getMessage(), e);
+            log.debug("Client error when calling {} {}: {}", httpMethod, path, e.getMessage(), e);
             ErrorEntity error = e.getResponseBodyAs(ErrorEntity.class);
             return Either.left(error);
         } catch (HttpServerErrorException e) {
-            log.error("Server error when calling {} {}: {}", httpMethod, url, e.getMessage(), e);
+            log.error("Server error when calling {} {}: {}", httpMethod, path, e.getMessage(), e);
             ErrorEntity error = e.getResponseBodyAs(ErrorEntity.class);
             return Either.left(error);
         } catch (ResourceAccessException e) {
-            log.error("Resource access error when calling {} {}: {}", httpMethod, url, e.getMessage(), e);
-            ErrorEntity error =  new ErrorEntity(503, "API Unreachable", e.getMessage(), Instant.now().toString(), url);
+            log.error("Resource access error when calling {} {}: {}", httpMethod, path, e.getMessage(), e);
+            ErrorEntity error =  new ErrorEntity(503, "API Unreachable", e.getMessage(), Instant.now().toString(), path);
             return Either.left(error);
         }
     }

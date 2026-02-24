@@ -8,8 +8,8 @@ import io.vavr.control.Either;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
-import org.mockito.MockedStatic;
+import org.junit.jupiter.params.provider.EmptySource;
+import org.junit.jupiter.params.provider.NullSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 
@@ -17,134 +17,126 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class MessageLogRegistrationClientTest {
 
-    private static final String BASE_URL = "https://api.example.com";
     private static MessageLogRegistrationClient client;
+
     private final String guildId = "123456789";
     private final String channelId = "987654321";
 
+    static HttpServiceEngine mockEngine = mock(HttpServiceEngine.class);
+
     @BeforeAll
-    static void registerClientAndHeader() {
-        client = new MessageLogRegistrationClient(BASE_URL);
+    static void registerClient() {
+        client = new MessageLogRegistrationClient(mockEngine);
     }
 
     @ParameterizedTest
-    @NullAndEmptySource
-    void testConstructor(String baseUrl) {
+    @EmptySource
+    void testConstructorEmptyBaseUrl(String baseUrl) {
         assertThrows(ApiBaseUrlException.class, () -> new MessageLogRegistrationClient(baseUrl));
+    }
+
+    @ParameterizedTest
+    @NullSource
+    void testConstructorNullBaseUrl(String baseUrl) {
+        assertThrows(NullPointerException.class, () -> new MessageLogRegistrationClient(baseUrl));
     }
 
     @Test
     void registerGuild_success() {
 
         MessageLogRegistrationEntity responseBody = new MessageLogRegistrationEntity(guildId, channelId);
-        try (MockedStatic<HttpServiceEngine> mockEngine = mockStatic(HttpServiceEngine.class)) {
-            mockEngine.when(() -> {
-                HttpServiceEngine.makeRequestWithBody(
-                        eq(HttpMethod.POST),
-                        eq(BASE_URL + "/api/v1/log/message"),
-                        any(HttpHeaders.class),
-                        any(MessageLogRegistrationEntity.class),
-                        eq(MessageLogRegistrationEntity.class)
-                );
-            }).thenReturn(Either.right(responseBody));
 
-            assertThat(client.registerGuild(guildId, channelId)).isTrue();
-        }
+        when(mockEngine.makeRequestWithBody(
+                eq(HttpMethod.POST),
+                eq("/api/v1/log/message"),
+                any(HttpHeaders.class),
+                any(MessageLogRegistrationEntity.class),
+                eq(MessageLogRegistrationEntity.class)
+        )).thenReturn(Either.right(responseBody));
+
+        assertThat(client.registerGuild(guildId, channelId)).isTrue();
+
     }
 
     @Test
     void registerGuild_error() {
 
         ErrorEntity errorBody = ErrorEntity.builder().build();
-        try (MockedStatic<HttpServiceEngine> mockEngine = mockStatic(HttpServiceEngine.class)) {
-            mockEngine.when(() -> {
-                HttpServiceEngine.makeRequestWithBody(
-                        eq(HttpMethod.POST),
-                        eq(BASE_URL + "/api/v1/log/message"),
-                        any(HttpHeaders.class),
-                        any(MessageLogRegistrationEntity.class),
-                        eq(MessageLogRegistrationEntity.class)
-                );
-            }).thenReturn(Either.left(errorBody));
 
-            assertThat(client.registerGuild(guildId, channelId)).isFalse();
-        }
+        when(mockEngine.makeRequestWithBody(
+                eq(HttpMethod.POST),
+                eq("/api/v1/log/message"),
+                any(HttpHeaders.class),
+                any(MessageLogRegistrationEntity.class),
+                eq(MessageLogRegistrationEntity.class)
+        )).thenReturn(Either.left(errorBody));
+
+        assertThat(client.registerGuild(guildId, channelId)).isFalse();
     }
 
     @Test
     void getRegisteredGuild_success() {
 
         MessageLogRegistrationEntity responseBody = new MessageLogRegistrationEntity(guildId, channelId);
-        try (MockedStatic<HttpServiceEngine> mockEngine = mockStatic(HttpServiceEngine.class)) {
-            mockEngine.when(() -> {
-                HttpServiceEngine.makeRequest(
-                        eq(HttpMethod.GET),
-                        eq(BASE_URL + "/api/v1/log/message/" + guildId),
-                        any(HttpHeaders.class),
-                        eq(MessageLogRegistrationEntity.class)
-                );
-            }).thenReturn(Either.right(responseBody));
 
-            assertThat(client.getRegisteredGuild(guildId)).isNotEmpty();
-            assertThat(client.getRegisteredGuild(guildId)).get().isEqualTo(responseBody);
-        }
+        when(mockEngine.makeRequest(
+                eq(HttpMethod.GET),
+                eq("/api/v1/log/message/" + guildId),
+                any(HttpHeaders.class),
+                eq(MessageLogRegistrationEntity.class)
+        )).thenReturn(Either.right(responseBody));
+
+        assertThat(client.getRegisteredGuild(guildId)).isNotEmpty();
+        assertThat(client.getRegisteredGuild(guildId)).get().isEqualTo(responseBody);
+
     }
 
     @Test
     void getRegisteredGuild_empty() {
 
         ErrorEntity responseBody = ErrorEntity.builder().build();
-        try (MockedStatic<HttpServiceEngine> mockEngine = mockStatic(HttpServiceEngine.class)) {
-            mockEngine.when(() -> {
-                HttpServiceEngine.makeRequest(
-                        eq(HttpMethod.GET),
-                        eq(BASE_URL + "/api/v1/log/message/" + guildId),
-                        any(HttpHeaders.class),
-                        eq(MessageLogRegistrationEntity.class)
-                );
-            }).thenReturn(Either.left(responseBody));
 
-            assertThat(client.getRegisteredGuild(guildId)).isEmpty();
-        }
+        when(mockEngine.makeRequest(
+                eq(HttpMethod.GET),
+                eq("/api/v1/log/message/" + guildId),
+                any(HttpHeaders.class),
+                eq(MessageLogRegistrationEntity.class)
+        )).thenReturn(Either.left(responseBody));
+
+        assertThat(client.getRegisteredGuild(guildId)).isEmpty();
     }
+
+
 
     @Test
     void deleteRegisteredGuild_success() {
 
-        try (MockedStatic<HttpServiceEngine> mockEngine = mockStatic(HttpServiceEngine.class)) {
+        when(mockEngine.makeRequest(
+                eq(HttpMethod.DELETE),
+                eq("/api/v1/log/message/" + guildId),
+                any(HttpHeaders.class),
+                eq(Void.class)
+        )).thenReturn(Either.right(null));
 
-            mockEngine.when(() -> {
-                HttpServiceEngine.makeRequest(
-                        eq(HttpMethod.DELETE),
-                        eq(BASE_URL + "/api/v1/log/message/" + guildId),
-                        any(HttpHeaders.class),
-                        eq(Void.class)
-                );
-            }).thenReturn(Either.right(null));
-
-            assertThat(client.deleteRegisteredGuild(guildId)).isTrue();
-        }
+        assertThat(client.deleteRegisteredGuild(guildId)).isTrue();
     }
 
     @Test
     void deleteRegisteredGuild_error() {
 
-        try (MockedStatic<HttpServiceEngine> mockEngine = mockStatic(HttpServiceEngine.class)) {
+        when(mockEngine.makeRequest(
+                eq(HttpMethod.DELETE),
+                eq("/api/v1/log/message/" + guildId),
+                any(HttpHeaders.class),
+                eq(Void.class)
+        )).thenReturn(Either.left(ErrorEntity.builder().build()));
 
-            mockEngine.when(() -> {
-                HttpServiceEngine.makeRequest(
-                        eq(HttpMethod.DELETE),
-                        eq(BASE_URL + "/api/v1/log/message/" + guildId),
-                        any(HttpHeaders.class),
-                        eq(Void.class)
-                );
-            }).thenReturn(Either.left(ErrorEntity.builder().build()));
+        assertThat(client.deleteRegisteredGuild(guildId)).isFalse();
 
-            assertThat(client.deleteRegisteredGuild(guildId)).isFalse();
-        }
     }
 }

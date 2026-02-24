@@ -20,7 +20,7 @@ import java.util.Optional;
 @Slf4j
 public class AuditLogRegistrationClient {
 
-    private final String baseUrl;
+    private final HttpServiceEngine engine;
 
     /**
      * Creates a new {@code AuditLogRegistrationClient}.
@@ -28,11 +28,15 @@ public class AuditLogRegistrationClient {
      * @param baseUrl the base URL of the PaperTrail API (must not be {@code null} or blank)
      * @throws ApiBaseUrlException if the base URL is {@code null} or empty
      */
-    public AuditLogRegistrationClient(String baseUrl){
-        if(baseUrl==null || baseUrl.trim().isEmpty())
-            throw new ApiBaseUrlException("Base URL is null or empty");
+    public AuditLogRegistrationClient(@NonNull String baseUrl){
+        this.engine = new HttpServiceEngine(baseUrl);
+    }
 
-        this.baseUrl = baseUrl;
+    /**
+     * Mostly for testing purposes
+     */
+    public AuditLogRegistrationClient (@NonNull HttpServiceEngine httpServiceEngine){
+        this.engine = httpServiceEngine;
     }
 
     /**
@@ -47,9 +51,9 @@ public class AuditLogRegistrationClient {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        Either<ErrorEntity, AuditLogRegistrationEntity> responseBody = HttpServiceEngine.makeRequestWithBody(
+        Either<ErrorEntity, AuditLogRegistrationEntity> responseBody = engine.makeRequestWithBody(
                 HttpMethod.POST,
-                baseUrl+"/api/v1/log/audit",
+                "/api/v1/log/audit",
                 headers,
                 new AuditLogRegistrationEntity(guildId, channelId),
                 AuditLogRegistrationEntity.class
@@ -73,9 +77,9 @@ public class AuditLogRegistrationClient {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        Either<ErrorEntity, AuditLogRegistrationEntity> response = HttpServiceEngine.makeRequest(
+        Either<ErrorEntity, AuditLogRegistrationEntity> response = engine.makeRequest(
                 HttpMethod.GET,
-                baseUrl+"/api/v1/log/audit/"+guildId,
+                "/api/v1/log/audit/"+guildId,
                 headers,
                 AuditLogRegistrationEntity.class
         );
@@ -98,9 +102,9 @@ public class AuditLogRegistrationClient {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        Either<ErrorEntity, Void> responseBody = HttpServiceEngine.makeRequest(
+        Either<ErrorEntity, Void> responseBody = engine.makeRequest(
                 HttpMethod.DELETE,
-                baseUrl +"/api/v1/log/audit/"+guildId,
+                "/api/v1/log/audit/"+guildId,
                 headers,
                 Void.class
         );

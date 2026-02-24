@@ -17,7 +17,7 @@ import java.util.Optional;
 @Slf4j
 public class MessageLogRegistrationClient {
 
-    private final String baseUrl;
+    private final HttpServiceEngine engine;
 
     /**
      * Creates a new {@code MessageLogRegistrationClient}.
@@ -25,11 +25,15 @@ public class MessageLogRegistrationClient {
      * @param baseUrl the base URL of the PaperTrail API (must not be {@code null} or blank)
      * @throws ApiBaseUrlException if the base URL is {@code null} or empty
      */
-    public MessageLogRegistrationClient(String baseUrl){
-        if(baseUrl==null || baseUrl.trim().isEmpty())
-            throw new ApiBaseUrlException("Base URL is null or empty");
+    public MessageLogRegistrationClient(@NonNull String baseUrl){
+        this.engine = new HttpServiceEngine(baseUrl);
+    }
 
-        this.baseUrl = baseUrl;
+    /**
+     * Mostly for testing purposes
+     */
+    public MessageLogRegistrationClient (@NonNull HttpServiceEngine httpServiceEngine){
+        this.engine = httpServiceEngine;
     }
 
     /**
@@ -44,9 +48,9 @@ public class MessageLogRegistrationClient {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        Either<ErrorEntity, MessageLogRegistrationEntity> responseBody = HttpServiceEngine.makeRequestWithBody(
+        Either<ErrorEntity, MessageLogRegistrationEntity> responseBody = engine.makeRequestWithBody(
                 HttpMethod.POST,
-                baseUrl+"/api/v1/log/message",
+                "/api/v1/log/message",
                 headers,
                 new MessageLogRegistrationEntity(guildId, channelId),
                 MessageLogRegistrationEntity.class
@@ -71,9 +75,9 @@ public class MessageLogRegistrationClient {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        Either<ErrorEntity, MessageLogRegistrationEntity> response = HttpServiceEngine.makeRequest(
+        Either<ErrorEntity, MessageLogRegistrationEntity> response = engine.makeRequest(
                 HttpMethod.GET,
-                baseUrl+"/api/v1/log/message/"+guildId,
+                "/api/v1/log/message/"+guildId,
                 headers,
                 MessageLogRegistrationEntity.class
         );
@@ -96,9 +100,9 @@ public class MessageLogRegistrationClient {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        Either<ErrorEntity, Void> responseBody = HttpServiceEngine.makeRequest(
+        Either<ErrorEntity, Void> responseBody = engine.makeRequest(
                 HttpMethod.DELETE,
-                baseUrl +"/api/v1/log/message/"+guildId,
+                "/api/v1/log/message/"+guildId,
                 headers,
                 Void.class
         );

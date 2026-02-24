@@ -20,7 +20,7 @@ import java.util.Optional;
 @Slf4j
 public class MessageLogContentClient {
 
-    private final String baseUrl;
+    private final HttpServiceEngine engine;
 
     /**
      * Creates a new {@code MessageLogContentClient}.
@@ -28,11 +28,15 @@ public class MessageLogContentClient {
      * @param baseUrl the base URL of the PaperTrail API (must not be {@code null} or blank)
      * @throws ApiBaseUrlException if the base URL is {@code null} or empty
      */
-    public MessageLogContentClient(String baseUrl){
-        if(baseUrl==null || baseUrl.trim().isEmpty())
-            throw new ApiBaseUrlException("Base URL is null or empty");
+    public MessageLogContentClient(@NonNull String baseUrl){
+        this.engine = new HttpServiceEngine(baseUrl);
+    }
 
-        this.baseUrl = baseUrl;
+    /**
+     * Mostly for testing purposes
+     */
+    public MessageLogContentClient (@NonNull HttpServiceEngine httpServiceEngine){
+        this.engine = httpServiceEngine;
     }
 
     /**
@@ -48,9 +52,9 @@ public class MessageLogContentClient {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        Either<ErrorEntity, MessageLogContentEntity> responseBody = HttpServiceEngine.makeRequestWithBody(
+        Either<ErrorEntity, MessageLogContentEntity> responseBody = engine.makeRequestWithBody(
                 HttpMethod.POST,
-                baseUrl + "/api/v1/content/message",
+                "/api/v1/content/message",
                 headers,
                 new MessageLogContentEntity(messageId, messageContent, authorId),
                 MessageLogContentEntity.class
@@ -74,9 +78,9 @@ public class MessageLogContentClient {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        Either<ErrorEntity, MessageLogContentEntity> response = HttpServiceEngine.makeRequest(
+        Either<ErrorEntity, MessageLogContentEntity> response = engine.makeRequest(
                 HttpMethod.GET,
-                baseUrl+"/api/v1/content/message/"+messageId,
+                "/api/v1/content/message/"+messageId,
                 headers,
                 MessageLogContentEntity.class
         );
@@ -101,9 +105,9 @@ public class MessageLogContentClient {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        Either<ErrorEntity, MessageLogContentEntity> responseBody = HttpServiceEngine.makeRequestWithBody(
+        Either<ErrorEntity, MessageLogContentEntity> responseBody = engine.makeRequestWithBody(
                 HttpMethod.PUT,
-                baseUrl+"/api/v1/content/message",
+                "/api/v1/content/message",
                 headers,
                 new MessageLogContentEntity(messageId, messageContent, authorId),
                 MessageLogContentEntity.class
@@ -125,9 +129,9 @@ public class MessageLogContentClient {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        Either<ErrorEntity, Void> responseBody = HttpServiceEngine.makeRequest(
+        Either<ErrorEntity, Void> responseBody = engine.makeRequest(
                 HttpMethod.DELETE,
-                baseUrl+"/api/v1/content/message/"+messageId,
+                "/api/v1/content/message/"+messageId,
                 headers,
                 Void.class
         );
