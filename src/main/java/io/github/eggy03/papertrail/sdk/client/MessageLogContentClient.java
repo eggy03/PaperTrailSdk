@@ -50,7 +50,7 @@ public class MessageLogContentClient {
 
         Either<ErrorEntity, MessageLogContentEntity> responseBody = HttpServiceEngine.makeRequestWithBody(
                 HttpMethod.POST,
-                baseUrl + "api/v1/content/message",
+                baseUrl + "/api/v1/content/message",
                 headers,
                 new MessageLogContentEntity(messageId, messageContent, authorId),
                 MessageLogContentEntity.class
@@ -76,7 +76,7 @@ public class MessageLogContentClient {
 
         Either<ErrorEntity, MessageLogContentEntity> response = HttpServiceEngine.makeRequest(
                 HttpMethod.GET,
-                baseUrl+"api/v1/content/message/"+messageId,
+                baseUrl+"/api/v1/content/message/"+messageId,
                 headers,
                 MessageLogContentEntity.class
         );
@@ -103,7 +103,7 @@ public class MessageLogContentClient {
 
         Either<ErrorEntity, MessageLogContentEntity> responseBody = HttpServiceEngine.makeRequestWithBody(
                 HttpMethod.PUT,
-                baseUrl+"api/v1/content/message",
+                baseUrl+"/api/v1/content/message",
                 headers,
                 new MessageLogContentEntity(messageId, messageContent, authorId),
                 MessageLogContentEntity.class
@@ -127,7 +127,7 @@ public class MessageLogContentClient {
 
         Either<ErrorEntity, Void> responseBody = HttpServiceEngine.makeRequest(
                 HttpMethod.DELETE,
-                baseUrl+"api/v1/content/message/"+messageId,
+                baseUrl+"/api/v1/content/message/"+messageId,
                 headers,
                 Void.class
         );

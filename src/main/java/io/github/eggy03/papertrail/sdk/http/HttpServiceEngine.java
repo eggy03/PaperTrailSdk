@@ -12,7 +12,6 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
 
-import java.net.URI;
 import java.time.Instant;
 
 /**
@@ -47,7 +46,7 @@ public class HttpServiceEngine {
 
         try {
             S body = client.method(httpMethod)
-                    .uri(URI.create(url))
+                    .uri(builder -> builder.path(url).build())
                     .headers(h-> h.addAll(headers))
                     .retrieve()
                     .toEntity(successResponseClass)
@@ -90,7 +89,7 @@ public class HttpServiceEngine {
 
         try {
             S body = client.method(httpMethod)
-                    .uri(URI.create(url))
+                    .uri(builder -> builder.path(url).build())
                     .headers(h-> h.addAll(headers))
                     .body(requestBody)
                     .retrieve()

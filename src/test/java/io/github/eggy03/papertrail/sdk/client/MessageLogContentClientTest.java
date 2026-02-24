@@ -47,7 +47,7 @@ class MessageLogContentClientTest {
             mockEngine.when(() -> {
                 HttpServiceEngine.makeRequestWithBody(
                         eq(HttpMethod.POST),
-                        eq(BASE_URL + "api/v1/content/message"),
+                        eq(BASE_URL + "/api/v1/content/message"),
                         any(HttpHeaders.class),
                         any(MessageLogContentEntity.class),
                         eq(MessageLogContentEntity.class)
@@ -66,7 +66,7 @@ class MessageLogContentClientTest {
             mockEngine.when(() -> {
                 HttpServiceEngine.makeRequestWithBody(
                         eq(HttpMethod.POST),
-                        eq(BASE_URL + "api/v1/content/message"),
+                        eq(BASE_URL + "/api/v1/content/message"),
                         any(HttpHeaders.class),
                         any(MessageLogContentEntity.class),
                         eq(MessageLogContentEntity.class)
@@ -85,7 +85,7 @@ class MessageLogContentClientTest {
             mockEngine.when(() -> {
                 HttpServiceEngine.makeRequest(
                         eq(HttpMethod.GET),
-                        eq(BASE_URL + "api/v1/content/message/" + messageId),
+                        eq(BASE_URL + "/api/v1/content/message/" + messageId),
                         any(HttpHeaders.class),
                         eq(MessageLogContentEntity.class)
                 );
@@ -103,7 +103,7 @@ class MessageLogContentClientTest {
             mockEngine.when(() -> {
                 HttpServiceEngine.makeRequest(
                         eq(HttpMethod.GET),
-                        eq(BASE_URL + "api/v1/content/message/" + messageId),
+                        eq(BASE_URL + "/api/v1/content/message/" + messageId),
                         any(HttpHeaders.class),
                         eq(MessageLogContentEntity.class)
                 );
@@ -121,7 +121,7 @@ class MessageLogContentClientTest {
             mockEngine.when(() -> {
                 HttpServiceEngine.makeRequestWithBody(
                         eq(HttpMethod.PUT),
-                        eq(BASE_URL + "api/v1/content/message"),
+                        eq(BASE_URL + "/api/v1/content/message"),
                         any(HttpHeaders.class),
                         any(MessageLogContentEntity.class),
                         eq(MessageLogContentEntity.class)
@@ -139,7 +139,7 @@ class MessageLogContentClientTest {
             mockEngine.when(() -> {
                 HttpServiceEngine.makeRequestWithBody(
                         eq(HttpMethod.PUT),
-                        eq(BASE_URL + "api/v1/content/message"),
+                        eq(BASE_URL + "/api/v1/content/message"),
                         any(HttpHeaders.class),
                         any(MessageLogContentEntity.class),
                         eq(MessageLogContentEntity.class)
@@ -156,7 +156,7 @@ class MessageLogContentClientTest {
             mockEngine.when(() -> {
                 HttpServiceEngine.makeRequest(
                         eq(HttpMethod.DELETE),
-                        eq(BASE_URL + "api/v1/content/message/" + messageId),
+                        eq(BASE_URL + "/api/v1/content/message/" + messageId),
                         any(HttpHeaders.class),
                         eq(Void.class)
                 );
@@ -173,7 +173,7 @@ class MessageLogContentClientTest {
             mockEngine.when(() -> {
                 HttpServiceEngine.makeRequest(
                         eq(HttpMethod.DELETE),
-                        eq(BASE_URL + "api/v1/content/message/" + messageId),
+                        eq(BASE_URL + "/api/v1/content/message/" + messageId),
                         any(HttpHeaders.class),
                         eq(Void.class)
                 );

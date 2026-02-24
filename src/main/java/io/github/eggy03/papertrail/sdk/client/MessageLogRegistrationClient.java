@@ -46,7 +46,7 @@ public class MessageLogRegistrationClient {
 
         Either<ErrorEntity, MessageLogRegistrationEntity> responseBody = HttpServiceEngine.makeRequestWithBody(
                 HttpMethod.POST,
-                baseUrl+"api/v1/log/message",
+                baseUrl+"/api/v1/log/message",
                 headers,
                 new MessageLogRegistrationEntity(guildId, channelId),
                 MessageLogRegistrationEntity.class
@@ -73,7 +73,7 @@ public class MessageLogRegistrationClient {
 
         Either<ErrorEntity, MessageLogRegistrationEntity> response = HttpServiceEngine.makeRequest(
                 HttpMethod.GET,
-                baseUrl+"api/v1/log/message/"+guildId,
+                baseUrl+"/api/v1/log/message/"+guildId,
                 headers,
                 MessageLogRegistrationEntity.class
         );
@@ -98,7 +98,7 @@ public class MessageLogRegistrationClient {
 
         Either<ErrorEntity, Void> responseBody = HttpServiceEngine.makeRequest(
                 HttpMethod.DELETE,
-                baseUrl +"api/v1/log/message/"+guildId,
+                baseUrl +"/api/v1/log/message/"+guildId,
                 headers,
                 Void.class
         );

@@ -45,7 +45,7 @@ class MessageLogRegistrationClientTest {
             mockEngine.when(() -> {
                 HttpServiceEngine.makeRequestWithBody(
                         eq(HttpMethod.POST),
-                        eq(BASE_URL + "api/v1/log/message"),
+                        eq(BASE_URL + "/api/v1/log/message"),
                         any(HttpHeaders.class),
                         any(MessageLogRegistrationEntity.class),
                         eq(MessageLogRegistrationEntity.class)
@@ -64,7 +64,7 @@ class MessageLogRegistrationClientTest {
             mockEngine.when(() -> {
                 HttpServiceEngine.makeRequestWithBody(
                         eq(HttpMethod.POST),
-                        eq(BASE_URL + "api/v1/log/message"),
+                        eq(BASE_URL + "/api/v1/log/message"),
                         any(HttpHeaders.class),
                         any(MessageLogRegistrationEntity.class),
                         eq(MessageLogRegistrationEntity.class)
@@ -83,7 +83,7 @@ class MessageLogRegistrationClientTest {
             mockEngine.when(() -> {
                 HttpServiceEngine.makeRequest(
                         eq(HttpMethod.GET),
-                        eq(BASE_URL + "api/v1/log/message/" + guildId),
+                        eq(BASE_URL + "/api/v1/log/message/" + guildId),
                         any(HttpHeaders.class),
                         eq(MessageLogRegistrationEntity.class)
                 );
@@ -102,7 +102,7 @@ class MessageLogRegistrationClientTest {
             mockEngine.when(() -> {
                 HttpServiceEngine.makeRequest(
                         eq(HttpMethod.GET),
-                        eq(BASE_URL + "api/v1/log/message/" + guildId),
+                        eq(BASE_URL + "/api/v1/log/message/" + guildId),
                         any(HttpHeaders.class),
                         eq(MessageLogRegistrationEntity.class)
                 );
@@ -120,7 +120,7 @@ class MessageLogRegistrationClientTest {
             mockEngine.when(() -> {
                 HttpServiceEngine.makeRequest(
                         eq(HttpMethod.DELETE),
-                        eq(BASE_URL + "api/v1/log/message/" + guildId),
+                        eq(BASE_URL + "/api/v1/log/message/" + guildId),
                         any(HttpHeaders.class),
                         eq(Void.class)
                 );
@@ -138,7 +138,7 @@ class MessageLogRegistrationClientTest {
             mockEngine.when(() -> {
                 HttpServiceEngine.makeRequest(
                         eq(HttpMethod.DELETE),
-                        eq(BASE_URL + "api/v1/log/message/" + guildId),
+                        eq(BASE_URL + "/api/v1/log/message/" + guildId),
                         any(HttpHeaders.class),
                         eq(Void.class)
                 );

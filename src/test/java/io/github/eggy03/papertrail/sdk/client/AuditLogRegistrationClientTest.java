@@ -45,7 +45,7 @@ class AuditLogRegistrationClientTest {
             mockEngine.when(() -> {
                 HttpServiceEngine.makeRequestWithBody(
                         eq(HttpMethod.POST),
-                        eq(BASE_URL + "api/v1/log/audit"),
+                        eq(BASE_URL + "/api/v1/log/audit"),
                         any(HttpHeaders.class),
                         any(AuditLogRegistrationEntity.class),
                         eq(AuditLogRegistrationEntity.class)
@@ -64,7 +64,7 @@ class AuditLogRegistrationClientTest {
             mockEngine.when(() -> {
                 HttpServiceEngine.makeRequestWithBody(
                         eq(HttpMethod.POST),
-                        eq(BASE_URL + "api/v1/log/audit"),
+                        eq(BASE_URL + "/api/v1/log/audit"),
                         any(HttpHeaders.class),
                         any(AuditLogRegistrationEntity.class),
                         eq(AuditLogRegistrationEntity.class)
@@ -83,7 +83,7 @@ class AuditLogRegistrationClientTest {
             mockEngine.when(() -> {
                 HttpServiceEngine.makeRequest(
                         eq(HttpMethod.GET),
-                        eq(BASE_URL + "api/v1/log/audit/" + guildId),
+                        eq(BASE_URL + "/api/v1/log/audit/" + guildId),
                         any(HttpHeaders.class),
                         eq(AuditLogRegistrationEntity.class)
                 );
@@ -102,7 +102,7 @@ class AuditLogRegistrationClientTest {
             mockEngine.when(() -> {
                 HttpServiceEngine.makeRequest(
                         eq(HttpMethod.GET),
-                        eq(BASE_URL + "api/v1/log/audit/" + guildId),
+                        eq(BASE_URL + "/api/v1/log/audit/" + guildId),
                         any(HttpHeaders.class),
                         eq(AuditLogRegistrationEntity.class)
                 );
@@ -120,7 +120,7 @@ class AuditLogRegistrationClientTest {
             mockEngine.when(() -> {
                 HttpServiceEngine.makeRequest(
                         eq(HttpMethod.DELETE),
-                        eq(BASE_URL + "api/v1/log/audit/" + guildId),
+                        eq(BASE_URL + "/api/v1/log/audit/" + guildId),
                         any(HttpHeaders.class),
                         eq(Void.class)
                 );
@@ -138,7 +138,7 @@ class AuditLogRegistrationClientTest {
             mockEngine.when(() -> {
                 HttpServiceEngine.makeRequest(
                         eq(HttpMethod.DELETE),
-                        eq(BASE_URL + "api/v1/log/audit/" + guildId),
+                        eq(BASE_URL + "/api/v1/log/audit/" + guildId),
                         any(HttpHeaders.class),
                         eq(Void.class)
                 );

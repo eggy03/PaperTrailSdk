@@ -49,7 +49,7 @@ public class AuditLogRegistrationClient {
 
         Either<ErrorEntity, AuditLogRegistrationEntity> responseBody = HttpServiceEngine.makeRequestWithBody(
                 HttpMethod.POST,
-                baseUrl+"api/v1/log/audit",
+                baseUrl+"/api/v1/log/audit",
                 headers,
                 new AuditLogRegistrationEntity(guildId, channelId),
                 AuditLogRegistrationEntity.class
@@ -75,7 +75,7 @@ public class AuditLogRegistrationClient {
 
         Either<ErrorEntity, AuditLogRegistrationEntity> response = HttpServiceEngine.makeRequest(
                 HttpMethod.GET,
-                baseUrl+"api/v1/log/audit/"+guildId,
+                baseUrl+"/api/v1/log/audit/"+guildId,
                 headers,
                 AuditLogRegistrationEntity.class
         );
@@ -100,7 +100,7 @@ public class AuditLogRegistrationClient {
 
         Either<ErrorEntity, Void> responseBody = HttpServiceEngine.makeRequest(
                 HttpMethod.DELETE,
-                baseUrl +"api/v1/log/audit/"+guildId,
+                baseUrl +"/api/v1/log/audit/"+guildId,
                 headers,
                 Void.class
         );
